@@ -5,6 +5,7 @@ for(var i=0 ; i <document.querySelectorAll(".drum").length;i++){
         var buttonPressed = this.innerHTML;
         buttonAnimation(buttonPressed);
     });
+}
 
 
 
@@ -61,7 +62,7 @@ document.querySelectorAll(".drum")[i].addEventListener( "mouseover", function(){
     this.style.color="#808080";
 });
 
-};
+
 function buttonAnimation(currentKey){
 
     var activeButton = document.querySelector("."+currentKey);
