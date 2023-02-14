@@ -1,0 +1,27 @@
+body{
+    background-color: #96a0bd;
+    
+  }
+  hr{
+    border-color: #00bfff;
+    
+    border-style:dotted none none;
+    border-width: 10px;
+    width: 10%;
+    
+  }
+  h1{
+    color: rgb(255, 0, 0);
+  }
+  h2{
+    color: rgb(255, 0, 0);
+  }
+  h3{
+    color: rgb(255, 0, 0);
+  }
+  img{
+    background-color: #00bfff;
+  }
+  img:hover{
+    background-color: rgb(201, 201, 45);
+  }
