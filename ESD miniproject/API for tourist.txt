@@ -1,0 +1,67 @@
+pip install Flask Flask-RESTful Flask-PyMongo
+from flask import Flask, request, jsonify
+from flask_restful import Resource, Api, reqparse
+from flask_pymongo import PyMongo
+
+app = Flask(__name__)
+app.config["MONGO_URI"] = "mongodb+srv://<username>:<password>@<cluster-address>/<database-name>?retryWrites=true&w=majority"
+mongo = PyMongo(app)
+
+api = Api(app)
+
+class TouristPlaces(Resource):
+    def get(self, place_id=None):
+        if place_id:
+            place = mongo.db.places.find_one_or_404({"_id": place_id})
+            return jsonify(place)
+        else:
+            places = []
+            for place in mongo.db.places.find():
+                places.append(place)
+            return jsonify(places)
+
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("name", type=str, required=True)
+        parser.add_argument("description", type=str, required=True)
+        parser.add_argument("location", type=str, required=True)
+        args = parser.parse_args()
+
+        place = {"name": args["name"], "description": args["description"], "location": args["location"]}
+
+        result = mongo.db.places.insert_one(place)
+        return {"id": str(result.inserted_id)}
+
+    def put(self, place_id):
+        parser = reqparse.RequestParser()
+        parser.add_argument("name", type=str)
+        parser.add_argument("description", type=str)
+        parser.add_argument("location", type=str)
+        args = parser.parse_args()
+
+        place = mongo.db.places.find_one_or_404({"_id": place_id})
+        if args["name"]:
+            place["name"] = args["name"]
+        if args["description"]:
+            place["description"] = args["description"]
+        if args["location"]:
+            place["location"] = args["location"]
+
+        mongo.db.places.replace_one({"_id": place_id}, place)
+        return "", 204
+
+    def delete(self, place_id):
+        mongo.db.places.delete_one({"_id": place_id})
+        return "", 204
+
+api.add_resource(TouristPlaces, "/places", "/places/<string:place_id>")
+
+if __name__ == "__main__":
+    app.run(debug=True)
+
+
+
+For:testing
+GET all places: GET http://localhost:5000/places
+GET a specific place: GET http://localhost:5000/places/<place_id>
+POST a new place: POST http://localhost:5000/places

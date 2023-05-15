@@ -1,0 +1,329 @@
+import pymongo
+
+# MongoDB connection settings
+mongo_uri = "mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.8.0"  # Replace with your MongoDB URI
+database_name = "tourist_places_db"
+collection_name = "places"
+
+# Data to insert
+data = {
+   "name": "India",
+   "location": {
+      "continent": "Asia",
+      "region": "South Asia"
+   },
+   "tourist_places": [
+	{
+   	"name": "Kerala Backwaters",
+   	"location": {
+      	"city": "",
+      	"state": "Kerala",
+      	"country": "India"
+   	},
+      "description": "A network of lagoons, lakes, and canals that run parallel to the Arabian Sea coast, the Kerala Backwaters are a popular tourist destination known for their serene beauty and scenic boat rides.",
+      "image": "https://example.com/kerala_backwaters.jpg",
+      "rating": 4.8,
+      "reviews": [
+         {
+         	"username": "Kajal",
+         	"comment": "The backwaters are a must-visit if you're ever in Kerala. The boat ride was such a peaceful experience.",
+         	"rating": 5
+         },
+         {
+        	 "username": "Dhirendra",
+        	 "comment": "Beautiful scenery, but it was quite crowded when we went.",
+        	 "rating": 4
+     	   }
+       ]
+     },
+     {
+   	  "name": "Goa",
+        "location": {
+           "city": "",
+           "state": "Goa",
+           "country": "India"
+         },
+        "description": "A former Portuguese colony on the western coast of India, Goa is known for its beautiful beaches, vibrant nightlife, and rich cultural heritage.",
+        "image": "https://example.com/goa.jpg",
+        "rating": 4.3,
+        "reviews": [
+           {
+              "username": "Ramesh",
+              "comment": "Goa has something for everyone, whether you're looking for a relaxing beach vacation or an adventure-packed trip.",
+              "rating": 5
+           },
+           {
+              "username": "Jaykishan",
+              "comment": "The beaches are great, but the crowds can be a bit overwhelming. Make sure you book your accommodations in advance.",
+              "rating": 4
+           }
+        ]
+     },
+     {
+  	 "name": "Rajasthan",
+  	 "location": {
+      	"city": "",
+      	"state": "Rajasthan",
+      	"country": "India"
+   	 },
+       "description": "A land of majestic forts, opulent palaces, and vibrant culture, Rajasthan is a must-visit destination for anyone interested in India's rich history.",
+  	 "image": "https://example.com/rajasthan.jpg",
+  	 "rating": 4.6,
+  	 "reviews": [
+         {
+         	"username": "Kashish",
+         	"comment": "Rajasthan is a feast for the senses. The architecture, the food, and the people are all amazing.",
+        	"rating": 5
+     	   },
+         {
+            "username": "Durga",
+            "comment": "The heat can be brutal in Rajasthan, so make sure you pack accordingly.",
+            "rating": 4
+         }
+       ]
+    },
+    {
+      "name": "Darjeeling",
+      "location": {
+      	"city": "",
+      	"state": "West Bengal",
+      	"country": "India"
+  	 },
+      "description": "Nestled in the foothills of the Himalayas, Darjeeling is known for its stunning views, world-famous tea gardens, and vibrant Tibetan culture.",
+      "image": "https://example.com/darjeeling.jpg",
+      "rating": 4.2,
+      "reviews": [
+         {
+        	"username": "Maya",
+            "comment": "The tea gardens are a must-visit, and the views of the mountains are breathtaking.",
+            "rating": 5
+         },
+         {
+            "username": "Jayant",
+            "comment": "Darjeeling is a bit off the beaten path, but it's definitely worth the journey.",
+     	      "rating": 4
+        }
+     ]
+    },
+    {
+      "name": "Tirupati Balaji",
+      "location": {
+           "city": "Tirupati",
+           "state": "Andhra Pradesh",
+           "country": "India"
+        },
+       "description": "One of the most visited pilgrimage sites in India, the Tirumala Venkateswara Temple in Tirupati is dedicated to Lord Venkateswara, an incarnation of Lord Vishnu.",
+       "image": "https://example.com/tirupati_balaji.jpg",
+       "rating": 4.9,
+       "reviews": [
+          {
+            "username": "PriyaGupta",
+            "comment": "The darshan was a bit crowded, but it was an incredibly spiritual experience.",
+            "rating": 5
+          },
+          {
+            "username": "RajeshKumar",
+            "comment": "The temple is well-maintained and the staff are very helpful.",
+            "rating": 4
+          }
+        ]
+     },
+     {
+        "name": "Badrinath",
+        "location": {
+      	"city": "",
+      	"state": "Uttarakhand",
+      	"country": "India"
+   	   },
+   	  "description": "Located in the Garhwal region of Uttarakhand, the Badrinath Temple is one of the four sacred shrines of Hinduism's Char Dham pilgrimage.",
+        "image": "https://example.com/badrinath.jpg",
+        "rating": 4.6,
+        "reviews": [
+          {
+             "username": "AnjaliSharma",
+             "comment": "The drive to Badrinath is long and winding, but the temple is worth it.",
+             "rating": 5
+          },
+          {
+             "username": "GauravSingh",
+             "comment": "The temple is surrounded by stunning mountain scenery.",
+             "rating": 4
+          }
+        ]
+    },
+    {
+ 	 "name": "Meenakshi Temple",
+       "location": {
+            "city": "Madurai",
+      	"state": "Tamil Nadu",
+      	"country": "India"
+         },
+       "description": "One of the most famous temples in South India, the Meenakshi Temple in Madurai is dedicated to Goddess Meenakshi, an avatar of Goddess Parvati.",
+       "image": "https://example.com/meenakshi_temple.jpg",
+       "rating": 4.3,
+       "reviews": [
+          {
+        	 "username": "SandeepKumar",
+         	 "comment": "The temple's architecture is amazing, and the inner sanctum is incredibly peaceful.",
+        	 "rating": 5
+          },
+          {
+        	 "username": "ShaliniJoshi",
+        	 "comment": "The temple can be quite crowded, so be prepared to wait in line.",
+        	 "rating": 4
+          }
+        ]
+     },
+     {
+       "name": "Ram Mandir",
+  	 "location": {
+     	 	"city": "Ayodhya",
+      	"state": "Uttar Pradesh",
+      	"country": "India"
+         },
+   	 "description": "The Ram Mandir is a Hindu temple that is being built at the site of the Babri Masjid in Ayodhya. The temple will be dedicated to Lord Ram, who is believed to have been born at the site.",
+   	 "image": "https://example.com/ram_mandir.jpg",
+   	 "rating": 4.5,
+       "reviews": [
+          {
+        	 "username": "RohitVerma",
+        	 "comment": "The construction of the Ram Mandir is a historic moment for India and for Hindus around the world.",
+        	 "rating": 5
+           },
+           {
+        	 "username": "PoojaSingh",
+        	 "comment": "The site of the Ram Mandir is beautiful and peaceful.",
+        	 "rating": 4
+           }
+         ]
+	},
+	{
+  	  "name": "12 Jyotirlingas",
+   	  "location": {
+      	 "city": "",
+      	 "state": "",
+      	 "country": "India"
+          },
+   	  "description": "The 12 Jyotirlingas are a set of twelve shrines that are dedicated to Lord Shiva. They are spread out across India and are considered to be some of the most important pilgrimage sites for Hindus.",
+   	  "image": "https://example.com/12_jyotirlingas.jpg",
+        "rating": 4.8,
+        "reviews": [
+           {
+        	 "username": "AmitGupta",
+        	 "comment": "Visiting all 12 Jyotirlingas can be a bit challenging, but it is definitely worth it for the spiritual experience.",
+        	 "rating": 5
+           },
+           {
+         	 "username": "NehaPatel",
+         	 "comment": "Each of the Jyotirlingas has its own unique history and significance, and they are all fascinating to visit.",
+         	 "rating": 4
+           }
+   	   ]
+	},
+	{
+   	  "name": "Krishna Janmabhoomi Mandir",
+   	  "location": {
+        	 "city": "Mathura",
+           	 "state": "Uttar Pradesh",
+      	 "country": "India"
+      },
+        "description": "The Krishna Janmabhoomi Mandir is a temple in Mathura that is believed to be the birthplace of Lord Krishna, an avatar of Lord Vishnu.",
+   	  "image": "https://example.com/krishna_janmabhoomi.jpg",
+        "rating": 4.4,
+   	  "reviews": [
+           {
+         	 "username": "RituSharma",
+             "comment": "The temple is beautifully decorated and has a peaceful atmosphere.",
+             "rating": 5
+           },
+           {
+             "username": "VikramSingh",
+         	 "comment": "The temple can get quite crowded, so it's best to visit early in the morning.",
+         	 "rating": 4
+           }
+         ]
+	},
+	{
+   	  "name": "Kamakhya Temple",
+   	  "location": {
+      	 "city": "Guwahati",
+      	 "state": "Assam",
+      	 "country": "India"
+          },
+   	  "description": "The Kamakhya Temple is a Hindu temple dedicated to the goddess Kamakhya. It is one of the 51 Shakti Peeth Temples and is located on the Nilachal Hill in Guwahati, Assam.",
+   	  "image": "https://example.com/kamakhya_temple.jpg",
+   	  "rating": 4.7,
+   	  "reviews": [
+           {
+         	 "username": "SudhirGupta",
+             "comment": "The Kamakhya Temple is a must-visit for anyone interested in Hindu mythology and culture.",
+             "rating": 5
+           },
+           {
+             "username": "PriyaSingh",
+         	 "comment": "The temple has a unique architecture and a peaceful atmosphere.",
+             "rating": 4
+           }
+         ]
+	},
+      {
+   	  "name": "Vaishno Devi Temple",
+        "location": {
+      	 "city": "Katra",
+      	 "state": "Jammu and Kashmir",
+      	 "country": "India"
+          },
+   	  "description": "The Vaishno Devi Temple is a Hindu temple dedicated to the goddess Vaishno Devi. It is one of the 51 Shakti Peeth Temples and is located in the Trikuta Mountains in Jammu and Kashmir.",
+   	  "image": "https://example.com/vaishno_devi_temple.jpg",
+   	  "rating": 4.8,
+   	  "reviews": [
+           {
+         	 "username": "RaviKumar",
+         	 "comment": "The trek to the Vaishno Devi Temple can be challenging, but it is a deeply spiritual experience.",
+         	 "rating": 5
+           },
+           {
+         	 "username": "AnjaliSharma",
+         	 "comment": "The temple has a beautiful location and a peaceful atmosphere.",
+         	 "rating": 4
+           }
+         ]
+	},
+	{
+   	  "name": "Kalighat Temple",
+        "location": {
+        	"city": "Kolkata",
+        	"state": "West Bengal",
+      	"country": "India"
+   	    },
+   	  "description": "The Kalighat Temple is a Hindu temple dedicated to the goddess Kali. It is one of the 51 Shakti Peeth Temples and is located in Kolkata, West Bengal.",
+   	  "image": "https://example.com/kalighat_temple.jpg",
+        "rating": 4.5,
+        "reviews": [
+           {
+         	 "username": "RahulDas",
+             "comment": "The Kalighat Temple is a fascinating glimpse into the rich mythology and culture of Bengal.",
+             "rating": 5
+           },
+           {
+         	 "username": "AparnaMukherjee",
+         	 "comment": "The temple has a powerful energy and a unique architecture.",
+             "rating": 4
+           }
+         ]
+ 	}
+   ]
+}
+    
+
+
+# Connect to MongoDB
+client = pymongo.MongoClient(mongo_uri)
+database = client[database_name]
+collection = database[collection_name]
+
+# Insert the data into MongoDB
+collection.insert_one(data)
+
+# Close the MongoDB connection
+client.close()
